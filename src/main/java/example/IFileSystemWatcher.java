@@ -17,4 +17,8 @@ public interface IFileSystemWatcher {
 	void addFileDeletedListener(IListener listener);
 
 	public List<File> getDeletedFiles();
+
+	List<File> getAddedFiles();
+
+	List<File> getChangedFiles();
 }
