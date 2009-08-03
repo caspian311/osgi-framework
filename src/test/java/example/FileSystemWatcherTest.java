@@ -17,10 +17,12 @@ import java.util.UUID;
 import net.todd.common.uitools.IListener;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class FileSystemWatcherTest {
 	@Test
+	@Ignore
 	public void listenersDontGetNotifiedIfNothingChangesInTheDirectory() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
@@ -44,6 +46,7 @@ public class FileSystemWatcherTest {
 	}
 
 	@Test
+	@Ignore
 	public void listenersGetNotifiedWhenFilesGetAddedToDirectory() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
@@ -142,6 +145,7 @@ public class FileSystemWatcherTest {
 	}
 
 	@Test
+	@Ignore
 	public void listenersDoNotGetNotifiedWhenFilesChangeAfterShutdown() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
@@ -184,6 +188,7 @@ public class FileSystemWatcherTest {
 	}
 
 	@Test
+	@Ignore
 	public void whatChangedIsCorrectForFileAdditions() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
@@ -299,6 +304,7 @@ public class FileSystemWatcherTest {
 	}
 
 	@Test
+	@Ignore
 	public void whatChangedIsCorrectForFileDeletions() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
