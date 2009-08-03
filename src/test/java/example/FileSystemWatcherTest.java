@@ -117,7 +117,7 @@ public class FileSystemWatcherTest {
 			watcher.addFileChangedListener(listener);
 			watcher.startup();
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			File oldFile = new File(tempDir, filename);
 			try {
@@ -131,7 +131,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			verify(listener);
 
