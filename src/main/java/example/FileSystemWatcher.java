@@ -37,17 +37,22 @@ public class FileSystemWatcher implements IFileSystemWatcher {
 			public void run() {
 				while (true) {
 					Map<String, Long> currentLastModifiedMap = new HashMap<String, Long>();
+					System.out.println("Collecting all last modifieds");
 					collectLastModifieds(watchedDirectory, currentLastModifiedMap);
 
+					System.out.println("Finding differences...");
 					findDirectoryDifferences(previousLastModifiedMap, currentLastModifiedMap);
 
 					if (!changedDifferences.isEmpty()) {
+						System.out.println("found a file that changed...");
 						fileChangedListenerManager.notifyListeners();
 					}
 					if (!addedDifferences.isEmpty()) {
+						System.out.println("found an added file...");
 						fileAddedListenerManager.notifyListeners();
 					}
 					if (!deletedDifferences.isEmpty()) {
+						System.out.println("found a deleted file...");
 						fileDeletedListenerManager.notifyListeners();
 					}
 
