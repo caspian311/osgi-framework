@@ -30,10 +30,10 @@ public class FileSystemWatcherTest {
 			IListener listener = createMock(IListener.class);
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 10);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
 			watcher.addFileChangedListener(listener);
 			watcher.startup();
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			verify(listener);
 
@@ -54,11 +54,11 @@ public class FileSystemWatcherTest {
 			listener.fireEvent();
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 10);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
 			watcher.addFileAddedListener(listener);
 			watcher.startup();
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			String filename = UUID.randomUUID().toString();
 
@@ -76,7 +76,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			verify(listener);
 
@@ -113,7 +113,7 @@ public class FileSystemWatcherTest {
 			listener.fireEvent();
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 10);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
 			watcher.addFileChangedListener(listener);
 			watcher.startup();
 
@@ -151,11 +151,11 @@ public class FileSystemWatcherTest {
 			IListener listener = createMock(IListener.class);
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 10);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
 			watcher.addFileChangedListener(listener);
 			watcher.startup();
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 			watcher.shutdown();
 
 			String filename = UUID.randomUUID().toString();
@@ -174,7 +174,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			verify(listener);
 
@@ -190,7 +190,7 @@ public class FileSystemWatcherTest {
 		try {
 			tempDir.mkdir();
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 10);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
 			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
 			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
@@ -199,7 +199,7 @@ public class FileSystemWatcherTest {
 			watcher.addFileDeletedListener(fileDeletedListener);
 			watcher.startup();
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileAddedListener.addedFiles);
@@ -220,7 +220,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileDeletedListener.deletedFiles);
@@ -256,7 +256,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 10);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
 			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
 			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
@@ -265,7 +265,7 @@ public class FileSystemWatcherTest {
 			watcher.addFileAddedListener(fileAddedListener);
 			watcher.startup();
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileAddedListener.addedFiles);
@@ -283,7 +283,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			assertNull(fileAddedListener.addedFiles);
 			assertNull(fileDeletedListener.deletedFiles);
@@ -320,7 +320,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 10);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
 			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
 			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
@@ -329,7 +329,7 @@ public class FileSystemWatcherTest {
 			watcher.addFileDeletedListener(fileDeletedListener);
 			watcher.startup();
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileAddedListener.addedFiles);
@@ -338,7 +338,7 @@ public class FileSystemWatcherTest {
 			File oldFile = new File(modifiedFilePath);
 			FileUtils.forceDelete(oldFile);
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileAddedListener.addedFiles);
