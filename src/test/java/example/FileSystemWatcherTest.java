@@ -17,12 +17,10 @@ import java.util.UUID;
 import net.todd.common.uitools.IListener;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class FileSystemWatcherTest {
 	@Test
-	@Ignore
 	public void listenersDontGetNotifiedIfNothingChangesInTheDirectory() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
@@ -32,21 +30,17 @@ public class FileSystemWatcherTest {
 			IListener listener = createMock(IListener.class);
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
 			watcher.addFileChangedListener(listener);
-			watcher.startup();
-			Thread.sleep(200);
+			watcher.checkForChanges();
 
 			verify(listener);
-
-			watcher.shutdown();
 		} finally {
 			FileUtils.deleteDirectory(tempDir);
 		}
 	}
 
 	@Test
-	@Ignore
 	public void listenersGetNotifiedWhenFilesGetAddedToDirectory() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
@@ -57,11 +51,8 @@ public class FileSystemWatcherTest {
 			listener.fireEvent();
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
 			watcher.addFileAddedListener(listener);
-			watcher.startup();
-
-			Thread.sleep(200);
 
 			String filename = UUID.randomUUID().toString();
 
@@ -79,30 +70,30 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(200);
+			watcher.checkForChanges();
 
 			verify(listener);
-
-			watcher.shutdown();
 		} finally {
 			FileUtils.deleteDirectory(tempDir);
 		}
 	}
 
 	@Test
-	public void listenersGetNotifiedWhenFilesChangeInTheDirectory() throws Exception {
+	public void listenersGetNotifiedWhenAFileChangesInTheDirectory() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
-		tempDir.delete();
+		String directoryLocation = tempDir.getAbsolutePath();
+		FileUtils.forceDelete(tempDir);
+		File directory = new File(directoryLocation);
 		try {
-			tempDir.mkdir();
+			directory.mkdir();
 
 			String filename = UUID.randomUUID().toString();
 
-			File newFile = new File(tempDir, filename);
+			File file = new File(directory, filename);
 			FileOutputStream fos = null;
 			PrintWriter out = null;
 			try {
-				fos = new FileOutputStream(newFile);
+				fos = new FileOutputStream(file);
 				out = new PrintWriter(fos);
 
 				out.println("hello world");
@@ -111,41 +102,38 @@ public class FileSystemWatcherTest {
 				out.close();
 				fos.close();
 			}
+
+			Thread.sleep(10);
 
 			IListener listener = createMock(IListener.class);
 			listener.fireEvent();
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
+			FileSystemWatcher watcher = new FileSystemWatcher(directory);
 			watcher.addFileChangedListener(listener);
-			watcher.startup();
 
-			Thread.sleep(200);
-
-			File oldFile = new File(tempDir, filename);
+			File sameFile = new File(directory, filename);
 			try {
-				fos = new FileOutputStream(oldFile);
+				fos = new FileOutputStream(sameFile);
 				out = new PrintWriter(fos);
 
 				out.println("hello again");
 				out.flush();
+				fos.flush();
 			} finally {
 				out.close();
 				fos.close();
 			}
 
-			Thread.sleep(200);
+			watcher.checkForChanges();
 
 			verify(listener);
-
-			watcher.shutdown();
 		} finally {
-			FileUtils.deleteDirectory(tempDir);
+			FileUtils.deleteDirectory(directory);
 		}
 	}
 
 	@Test
-	@Ignore
 	public void listenersDoNotGetNotifiedWhenFilesChangeAfterShutdown() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
@@ -155,12 +143,9 @@ public class FileSystemWatcherTest {
 			IListener listener = createMock(IListener.class);
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
 			watcher.addFileChangedListener(listener);
-			watcher.startup();
-
-			Thread.sleep(200);
-			watcher.shutdown();
+			watcher.checkForChanges();
 
 			String filename = UUID.randomUUID().toString();
 
@@ -188,23 +173,21 @@ public class FileSystemWatcherTest {
 	}
 
 	@Test
-	@Ignore
 	public void whatChangedIsCorrectForFileAdditions() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
 		try {
 			tempDir.mkdir();
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
 			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
 			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
 			watcher.addFileChangedListener(fileChangedListener);
 			watcher.addFileAddedListener(fileAddedListener);
 			watcher.addFileDeletedListener(fileDeletedListener);
-			watcher.startup();
 
-			Thread.sleep(200);
+			watcher.checkForChanges();
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileAddedListener.addedFiles);
@@ -225,15 +208,13 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(200);
+			watcher.checkForChanges();
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileDeletedListener.deletedFiles);
 			assertNotNull(fileAddedListener.addedFiles);
 			assertEquals(1, fileAddedListener.addedFiles.size());
 			assertEquals(modifiedFilePath, fileAddedListener.addedFiles.get(0).getAbsolutePath());
-
-			watcher.shutdown();
 		} finally {
 			FileUtils.deleteDirectory(tempDir);
 		}
@@ -261,16 +242,17 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
+			Thread.sleep(10);
+
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
 			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
 			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
 			watcher.addFileChangedListener(fileChangedListener);
 			watcher.addFileDeletedListener(fileDeletedListener);
 			watcher.addFileAddedListener(fileAddedListener);
-			watcher.startup();
 
-			Thread.sleep(200);
+			watcher.checkForChanges();
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileAddedListener.addedFiles);
@@ -283,12 +265,13 @@ public class FileSystemWatcherTest {
 
 				out.println("hello again");
 				out.flush();
+				fos.flush();
 			} finally {
 				out.close();
 				fos.close();
 			}
 
-			Thread.sleep(200);
+			watcher.checkForChanges();
 
 			assertNull(fileAddedListener.addedFiles);
 			assertNull(fileDeletedListener.deletedFiles);
@@ -296,15 +279,12 @@ public class FileSystemWatcherTest {
 			assertEquals(1, fileChangedListener.modifiedFiles.size());
 			assertEquals(modifiedFilePath, fileChangedListener.modifiedFiles.get(0)
 					.getAbsolutePath());
-
-			watcher.shutdown();
 		} finally {
 			FileUtils.deleteDirectory(tempDir);
 		}
 	}
 
 	@Test
-	@Ignore
 	public void whatChangedIsCorrectForFileDeletions() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
 		tempDir.delete();
@@ -326,16 +306,15 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir, 50);
+			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
 			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
 			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
 			watcher.addFileChangedListener(fileChangedListener);
 			watcher.addFileChangedListener(fileAddedListener);
 			watcher.addFileDeletedListener(fileDeletedListener);
-			watcher.startup();
 
-			Thread.sleep(200);
+			watcher.checkForChanges();
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileAddedListener.addedFiles);
@@ -344,7 +323,7 @@ public class FileSystemWatcherTest {
 			File oldFile = new File(modifiedFilePath);
 			FileUtils.forceDelete(oldFile);
 
-			Thread.sleep(200);
+			watcher.checkForChanges();
 
 			assertNull(fileChangedListener.modifiedFiles);
 			assertNull(fileAddedListener.addedFiles);
@@ -352,8 +331,6 @@ public class FileSystemWatcherTest {
 			assertEquals(1, fileDeletedListener.deletedFiles.size());
 			assertEquals(modifiedFilePath, fileDeletedListener.deletedFiles.get(0)
 					.getAbsolutePath());
-
-			watcher.shutdown();
 		} finally {
 			FileUtils.deleteDirectory(tempDir);
 		}

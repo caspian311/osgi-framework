@@ -12,8 +12,6 @@ import net.todd.common.uitools.ListenerManager;
 
 public class FileSystemWatcher implements IFileSystemWatcher {
 	private final File watchedDirectory;
-	private final long sleeptime;
-	private Thread thread;
 	private Map<String, Long> previousLastModifiedMap;
 
 	private final List<File> addedDifferences = new ArrayList<File>();
@@ -24,56 +22,39 @@ public class FileSystemWatcher implements IFileSystemWatcher {
 	private final ListenerManager fileAddedListenerManager = new ListenerManager();
 	private final ListenerManager fileDeletedListenerManager = new ListenerManager();
 
-	public FileSystemWatcher(File pluginDirectory, long sleeptime) {
+	public FileSystemWatcher(File pluginDirectory) {
 		this.watchedDirectory = pluginDirectory;
-		this.sleeptime = sleeptime;
-	}
 
-	public void startup() throws Exception {
 		previousLastModifiedMap = new HashMap<String, Long>();
 		collectLastModifieds(watchedDirectory, previousLastModifiedMap);
+	}
 
-		thread = new Thread(new Runnable() {
-			public void run() {
-				while (true) {
-					Map<String, Long> currentLastModifiedMap = new HashMap<String, Long>();
-					System.out.println("Collecting all last modifieds");
-					collectLastModifieds(watchedDirectory, currentLastModifiedMap);
+	public void checkForChanges() throws Exception {
+		Map<String, Long> currentLastModifiedMap = new HashMap<String, Long>();
+		collectLastModifieds(watchedDirectory, currentLastModifiedMap);
 
-					System.out.println("Finding differences...");
-					findDirectoryDifferences(previousLastModifiedMap, currentLastModifiedMap);
+		findDirectoryDifferences(previousLastModifiedMap, currentLastModifiedMap);
 
-					if (!changedDifferences.isEmpty()) {
-						System.out.println("found a file that changed...");
-						fileChangedListenerManager.notifyListeners();
-					}
-					if (!addedDifferences.isEmpty()) {
-						System.out.println("found an added file...");
-						fileAddedListenerManager.notifyListeners();
-					}
-					if (!deletedDifferences.isEmpty()) {
-						System.out.println("found a deleted file...");
-						fileDeletedListenerManager.notifyListeners();
-					}
+		if (!changedDifferences.isEmpty()) {
+			fileChangedListenerManager.notifyListeners();
+		}
+		if (!addedDifferences.isEmpty()) {
+			fileAddedListenerManager.notifyListeners();
+		}
+		if (!deletedDifferences.isEmpty()) {
+			fileDeletedListenerManager.notifyListeners();
+		}
 
-					previousLastModifiedMap = currentLastModifiedMap;
-
-					try {
-						Thread.sleep(sleeptime);
-					} catch (InterruptedException e) {
-						break;
-					}
-				}
-			}
-		}, "File System Watcher");
-		thread.setDaemon(true);
-		thread.start();
+		previousLastModifiedMap = currentLastModifiedMap;
 	}
 
 	private void collectLastModifieds(File directory, Map<String, Long> lastModifiedMap) {
-		File[] files = directory.listFiles();
-		if (files != null) {
-			for (File file : files) {
+		String[] filenames = directory.list();
+		if (filenames != null && filenames.length != 0) {
+			for (String filename : filenames) {
+				File file = new File(directory, filename);
+				System.out.println(file.getAbsolutePath() + " last modified at "
+						+ file.lastModified());
 				if (file.isDirectory()) {
 					collectLastModifieds(file, lastModifiedMap);
 				} else {
@@ -123,11 +104,6 @@ public class FileSystemWatcher implements IFileSystemWatcher {
 				addedDifferences.add(new File(currentFileList.get(i)));
 			}
 		}
-	}
-
-	public void shutdown() throws Exception {
-		thread.interrupt();
-		thread.join();
 	}
 
 	public void addFileChangedListener(IListener listener) {

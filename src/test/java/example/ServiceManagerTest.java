@@ -166,11 +166,7 @@ public class ServiceManagerTest {
 			return changedFiles;
 		}
 
-		public void shutdown() throws Exception {
-			throw new UnsupportedOperationException();
-		}
-
-		public void startup() throws Exception {
+		public void checkForChanges() throws Exception {
 			throw new UnsupportedOperationException();
 		}
 	}

@@ -6,9 +6,7 @@ import java.util.List;
 import net.todd.common.uitools.IListener;
 
 public interface IFileSystemWatcher {
-	void startup() throws Exception;
-
-	void shutdown() throws Exception;
+	void checkForChanges() throws Exception;
 
 	void addFileChangedListener(IListener listener);
 
