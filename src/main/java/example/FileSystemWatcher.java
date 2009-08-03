@@ -69,10 +69,10 @@ public class FileSystemWatcher implements IFileSystemWatcher {
 		File[] files = directory.listFiles();
 		if (files != null) {
 			for (File file : files) {
-				lastModifiedMap.put(file.getAbsolutePath(), file.lastModified());
-
 				if (file.isDirectory()) {
 					collectLastModifieds(file, lastModifiedMap);
+				} else {
+					lastModifiedMap.put(file.getAbsolutePath(), file.lastModified());
 				}
 			}
 		}
