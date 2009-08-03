@@ -53,8 +53,6 @@ public class FileSystemWatcher implements IFileSystemWatcher {
 		if (filenames != null && filenames.length != 0) {
 			for (String filename : filenames) {
 				File file = new File(directory, filename);
-				System.out.println(file.getAbsolutePath() + " last modified at "
-						+ file.lastModified());
 				if (file.isDirectory()) {
 					collectLastModifieds(file, lastModifiedMap);
 				} else {

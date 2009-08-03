@@ -103,7 +103,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(10);
+			Thread.sleep(1000);
 
 			IListener listener = createMock(IListener.class);
 			listener.fireEvent();
@@ -163,7 +163,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(200);
+			Thread.sleep(1000);
 
 			verify(listener);
 
@@ -242,7 +242,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			Thread.sleep(10);
+			Thread.sleep(1000);
 
 			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
