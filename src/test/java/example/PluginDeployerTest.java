@@ -45,8 +45,7 @@ public class PluginDeployerTest {
 		bundleRegistry.installBundle(plugin2);
 		replay(bundleRegistry);
 
-		PluginDeployer deployer = new PluginDeployer(pluginDirectory, bundleRegistry);
-		deployer.deployPlugins();
+		new PluginDeployer().deployPlugins(pluginDirectory, bundleRegistry);
 
 		verify(bundleRegistry);
 	}

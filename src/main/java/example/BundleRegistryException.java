@@ -10,8 +10,4 @@ public class BundleRegistryException extends RuntimeException {
 	public BundleRegistryException(Throwable cause) {
 		super(cause);
 	}
-
-	public BundleRegistryException(String message, Throwable cause) {
-		super(message, cause);
-	}
 }

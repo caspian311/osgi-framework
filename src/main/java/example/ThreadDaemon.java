@@ -34,7 +34,7 @@ public class ThreadDaemon {
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 }
