@@ -10,7 +10,7 @@ public class ThreadDaemonTest {
 	@Test
 	public void threadDaemonShouldRunTheRunnableThenSleepForGivenSleepTime()
 			throws InterruptedException {
-		ThreadDaemon threadDaemon = new ThreadDaemon(new Runnable() {
+		ThreadDaemon threadDaemon = new ThreadDaemon("test daemon", new Runnable() {
 			public void run() {
 				runCount++;
 			}

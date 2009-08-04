@@ -1,17 +1,9 @@
 package example;
 
 public class ThreadDaemon {
-	private final long sleeptime;
-	private Thread thread;
+	private final Thread thread;
 
-	private final Runnable runnable;
-
-	public ThreadDaemon(Runnable runnable, long sleeptime) {
-		this.runnable = runnable;
-		this.sleeptime = sleeptime;
-	}
-
-	public void startup() {
+	public ThreadDaemon(String threadName, final Runnable runnable, final long sleeptime) {
 		thread = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
@@ -24,8 +16,11 @@ public class ThreadDaemon {
 					}
 				}
 			}
-		}, "File System Watcher");
+		}, threadName);
 		thread.setDaemon(true);
+	}
+
+	public void startup() {
 		thread.start();
 	}
 
