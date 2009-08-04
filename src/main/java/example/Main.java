@@ -25,7 +25,7 @@ public class Main {
 	private void deployments(File pluginDirectory) {
 		IBundleRegistry bundleRegistry = createBundleRegistry();
 		new PluginDeployer().deployPlugins(pluginDirectory, bundleRegistry);
-		new HotDeployer().deployPlugins(pluginDirectory, bundleRegistry);
+		new HotDeployer(1000).deployPlugins(pluginDirectory, bundleRegistry);
 	}
 
 	private IBundleRegistry createBundleRegistry() {

@@ -3,6 +3,12 @@ package example;
 import java.io.File;
 
 public class HotDeployer implements IPluginDeployer {
+	private final long sleeptime;
+
+	public HotDeployer(long sleeptime) {
+		this.sleeptime = sleeptime;
+	}
+
 	public void deployPlugins(File pluginDirectory, IBundleRegistry bundleRegistry) {
 		final DirectoryWatcher directoryWatcher = new DirectoryWatcher(pluginDirectory);
 		final ThreadDaemon threadDaemon = new ThreadDaemon("File System Watcher", new Runnable() {
@@ -13,7 +19,7 @@ public class HotDeployer implements IPluginDeployer {
 					throw new RuntimeException(e);
 				}
 			}
-		}, 1000);
+		}, sleeptime);
 		threadDaemon.startup();
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
