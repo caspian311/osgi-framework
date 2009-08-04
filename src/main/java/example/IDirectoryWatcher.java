@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.todd.common.uitools.IListener;
 
-public interface IFileSystemWatcher {
+public interface IDirectoryWatcher {
 	void checkForChanges() throws Exception;
 
 	void addFileChangedListener(IListener listener);

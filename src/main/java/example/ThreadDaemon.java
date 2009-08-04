@@ -1,17 +1,17 @@
 package example;
 
-public class FileSystemWatcherLauncher {
+public class ThreadDaemon {
 	private final long sleeptime;
 	private Thread thread;
 
 	private final Runnable runnable;
 
-	public FileSystemWatcherLauncher(Runnable runnable, long sleeptime) {
+	public ThreadDaemon(Runnable runnable, long sleeptime) {
 		this.runnable = runnable;
 		this.sleeptime = sleeptime;
 	}
 
-	public void startup() throws Exception {
+	public void startup() {
 		thread = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
@@ -27,5 +27,14 @@ public class FileSystemWatcherLauncher {
 		}, "File System Watcher");
 		thread.setDaemon(true);
 		thread.start();
+	}
+
+	public void shutdown() {
+		thread.interrupt();
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 import net.todd.common.uitools.IListener;
 import net.todd.common.uitools.ListenerManager;
 
-public class FileSystemWatcher implements IFileSystemWatcher {
+public class DirectoryWatcher implements IDirectoryWatcher {
 	private final File watchedDirectory;
 	private Map<String, Long> previousLastModifiedMap;
 
@@ -22,7 +22,7 @@ public class FileSystemWatcher implements IFileSystemWatcher {
 	private final ListenerManager fileAddedListenerManager = new ListenerManager();
 	private final ListenerManager fileDeletedListenerManager = new ListenerManager();
 
-	public FileSystemWatcher(File pluginDirectory) {
+	public DirectoryWatcher(File pluginDirectory) {
 		this.watchedDirectory = pluginDirectory;
 
 		previousLastModifiedMap = new HashMap<String, Long>();

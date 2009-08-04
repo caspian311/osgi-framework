@@ -6,25 +6,25 @@ import net.todd.common.uitools.IListener;
 
 public class ServiceManager {
 	private final IBundleRegistry bundleRegistry;
-	private final IFileSystemWatcher fileSystemWatcher;
+	private final IDirectoryWatcher directoryWatcher;
 
-	public ServiceManager(IBundleRegistry bundleRegistry, IFileSystemWatcher fileSystemWatcher) {
+	public ServiceManager(IBundleRegistry bundleRegistry, IDirectoryWatcher directoryWatcher) {
 		this.bundleRegistry = bundleRegistry;
-		this.fileSystemWatcher = fileSystemWatcher;
+		this.directoryWatcher = directoryWatcher;
 
-		fileSystemWatcher.addFileDeletedListener(new IListener() {
+		directoryWatcher.addFileDeletedListener(new IListener() {
 			public void fireEvent() {
 				handleFileDeleted();
 			}
 		});
 
-		fileSystemWatcher.addFileAddedListener(new IListener() {
+		directoryWatcher.addFileAddedListener(new IListener() {
 			public void fireEvent() {
 				handleFileAdded();
 			}
 		});
 
-		fileSystemWatcher.addFileChangedListener(new IListener() {
+		directoryWatcher.addFileChangedListener(new IListener() {
 			public void fireEvent() {
 				handleFileChanged();
 			}
@@ -32,19 +32,19 @@ public class ServiceManager {
 	}
 
 	private void handleFileDeleted() {
-		for (File deletedFile : fileSystemWatcher.getDeletedFiles()) {
+		for (File deletedFile : directoryWatcher.getDeletedFiles()) {
 			bundleRegistry.uninstallBundle(deletedFile);
 		}
 	}
 
 	private void handleFileAdded() {
-		for (File addedFile : fileSystemWatcher.getAddedFiles()) {
+		for (File addedFile : directoryWatcher.getAddedFiles()) {
 			bundleRegistry.installBundle(addedFile);
 		}
 	}
 
 	private void handleFileChanged() {
-		for (File changedFile : fileSystemWatcher.getChangedFiles()) {
+		for (File changedFile : directoryWatcher.getChangedFiles()) {
 			bundleRegistry.uninstallBundle(changedFile);
 			bundleRegistry.installBundle(changedFile);
 		}

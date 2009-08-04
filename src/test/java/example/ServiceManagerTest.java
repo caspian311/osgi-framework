@@ -134,7 +134,7 @@ public class ServiceManagerTest {
 		verify(bundleRegistry);
 	}
 
-	private static class MockFileSystemWatcher implements IFileSystemWatcher {
+	private static class MockFileSystemWatcher implements IDirectoryWatcher {
 		private IListener fileDeletedListener;
 		private IListener fileAddedListener;
 		private final List<File> deletedFiles = new ArrayList<File>();

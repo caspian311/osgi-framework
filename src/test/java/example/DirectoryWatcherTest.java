@@ -19,7 +19,7 @@ import net.todd.common.uitools.IListener;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-public class FileSystemWatcherTest {
+public class DirectoryWatcherTest {
 	@Test
 	public void listenersDontGetNotifiedIfNothingChangesInTheDirectory() throws Exception {
 		File tempDir = File.createTempFile(getClass().getName(), null);
@@ -30,7 +30,7 @@ public class FileSystemWatcherTest {
 			IListener listener = createMock(IListener.class);
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
+			DirectoryWatcher watcher = new DirectoryWatcher(tempDir);
 			watcher.addFileChangedListener(listener);
 			watcher.checkForChanges();
 
@@ -51,7 +51,7 @@ public class FileSystemWatcherTest {
 			listener.fireEvent();
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
+			DirectoryWatcher watcher = new DirectoryWatcher(tempDir);
 			watcher.addFileAddedListener(listener);
 
 			String filename = UUID.randomUUID().toString();
@@ -109,7 +109,7 @@ public class FileSystemWatcherTest {
 			listener.fireEvent();
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(directory);
+			DirectoryWatcher watcher = new DirectoryWatcher(directory);
 			watcher.addFileChangedListener(listener);
 
 			File sameFile = new File(directory, filename);
@@ -143,7 +143,7 @@ public class FileSystemWatcherTest {
 			IListener listener = createMock(IListener.class);
 			replay(listener);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
+			DirectoryWatcher watcher = new DirectoryWatcher(tempDir);
 			watcher.addFileChangedListener(listener);
 			watcher.checkForChanges();
 
@@ -179,7 +179,7 @@ public class FileSystemWatcherTest {
 		try {
 			tempDir.mkdir();
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
+			DirectoryWatcher watcher = new DirectoryWatcher(tempDir);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
 			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
 			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
@@ -244,7 +244,7 @@ public class FileSystemWatcherTest {
 
 			Thread.sleep(1000);
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
+			DirectoryWatcher watcher = new DirectoryWatcher(tempDir);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
 			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
 			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
@@ -306,7 +306,7 @@ public class FileSystemWatcherTest {
 				fos.close();
 			}
 
-			FileSystemWatcher watcher = new FileSystemWatcher(tempDir);
+			DirectoryWatcher watcher = new DirectoryWatcher(tempDir);
 			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
 			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
 			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
@@ -337,10 +337,10 @@ public class FileSystemWatcherTest {
 	}
 
 	private static class MockAddFileListener implements IListener {
-		private final FileSystemWatcher watcher;
+		private final DirectoryWatcher watcher;
 		private List<File> addedFiles;
 
-		public MockAddFileListener(FileSystemWatcher watcher) {
+		public MockAddFileListener(DirectoryWatcher watcher) {
 			this.watcher = watcher;
 		}
 
@@ -350,10 +350,10 @@ public class FileSystemWatcherTest {
 	}
 
 	private static class MockDeleteFileListener implements IListener {
-		private final FileSystemWatcher watcher;
+		private final DirectoryWatcher watcher;
 		private List<File> deletedFiles;
 
-		public MockDeleteFileListener(FileSystemWatcher watcher) {
+		public MockDeleteFileListener(DirectoryWatcher watcher) {
 			this.watcher = watcher;
 		}
 
@@ -363,10 +363,10 @@ public class FileSystemWatcherTest {
 	}
 
 	private static class MockChangeFileListener implements IListener {
-		private final FileSystemWatcher watcher;
+		private final DirectoryWatcher watcher;
 		private List<File> modifiedFiles;
 
-		public MockChangeFileListener(FileSystemWatcher watcher) {
+		public MockChangeFileListener(DirectoryWatcher watcher) {
 			this.watcher = watcher;
 		}
 
