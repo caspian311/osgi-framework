@@ -6,12 +6,20 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.launch.Framework;
 
 public class Main {
+	private static final String BAD_ARGUMENT_ERROR = "Need a plugin directory";
+
 	public static void main(String[] args) {
 		if (args == null || args.length != 1) {
-			throw new IllegalArgumentException("Need a plugin directory");
+			throw new IllegalArgumentException(BAD_ARGUMENT_ERROR);
 		}
 
-		new Main().deployments(new File(args[0]));
+		File pluginDirectory = new File(args[0]);
+
+		if (!pluginDirectory.isDirectory()) {
+			throw new IllegalArgumentException(BAD_ARGUMENT_ERROR);
+		}
+
+		new Main().deployments(pluginDirectory);
 	}
 
 	private void deployments(File pluginDirectory) {
