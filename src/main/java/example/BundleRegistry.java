@@ -1,6 +1,8 @@
 package example;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,11 +19,26 @@ public class BundleRegistry implements IBundleRegistry {
 	}
 
 	public void installBundle(File file) {
+		FileInputStream inputstream = null;
 		try {
-			Bundle bundle = bundleContext.installBundle(file.getAbsolutePath());
+			String bundleLocation;
+			try {
+				bundleLocation = file.toURI().toURL().toExternalForm();
+				inputstream = new FileInputStream(file);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			Bundle bundle = bundleContext.installBundle(bundleLocation, inputstream);
 			registry.put(file.getAbsolutePath(), bundle);
+			bundle.start();
 		} catch (BundleException e) {
 			throw new BundleRegistryException(e);
+		} finally {
+			try {
+				inputstream.close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 

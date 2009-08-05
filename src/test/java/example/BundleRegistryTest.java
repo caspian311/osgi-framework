@@ -1,6 +1,8 @@
 package example;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
@@ -10,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -23,11 +26,13 @@ public class BundleRegistryTest {
 	public void installingABundleWithTheRegistryInstallsThePluginInTheUnderlyingBundleContext()
 			throws Exception {
 		File file = File.createTempFile(getClass().getName(), ".jar");
+		String fileLocation = file.toURI().toURL().toExternalForm();
 
 		try {
 			BundleContext bundleContext = createMock(BundleContext.class);
 			Bundle bundle = createMock(Bundle.class);
-			expect(bundleContext.installBundle(file.getAbsolutePath())).andReturn(bundle);
+			expect(bundleContext.installBundle(eq(fileLocation), (FileInputStream) anyObject()))
+					.andReturn(bundle);
 			replay(bundleContext);
 
 			BundleRegistry registry = new BundleRegistry(bundleContext);
@@ -42,12 +47,13 @@ public class BundleRegistryTest {
 	@Test
 	public void throwBundleExceptionIfExceptionIsThrownWhileInstallingThePlugin() throws Exception {
 		File file = File.createTempFile(getClass().getName(), ".jar");
+		String fileLocation = file.toURI().toURL().toExternalForm();
 
 		try {
 			BundleContext bundleContext = createMock(BundleContext.class);
 			String errorMessage = "Could not install bundle: " + file.getAbsolutePath();
-			expect(bundleContext.installBundle(file.getAbsolutePath())).andThrow(
-					new BundleException(errorMessage));
+			expect(bundleContext.installBundle(eq(fileLocation), (FileInputStream) anyObject()))
+					.andThrow(new BundleException(errorMessage));
 			replay(bundleContext);
 
 			BundleRegistry registry = new BundleRegistry(bundleContext);
@@ -91,11 +97,14 @@ public class BundleRegistryTest {
 	@Test
 	public void bundleRegistryCanUninstallPreviouslyInstalledBundle() throws Exception {
 		File file = File.createTempFile(getClass().getName(), ".jar");
+		String fileLocation = file.toURI().toURL().toExternalForm();
 
 		try {
 			BundleContext bundleContext = createMock(BundleContext.class);
 			Bundle bundle = createMock(Bundle.class);
-			expect(bundleContext.installBundle(file.getAbsolutePath())).andReturn(bundle);
+			expect(bundleContext.installBundle(eq(fileLocation), (FileInputStream) anyObject()))
+					.andReturn(bundle);
+			bundle.start();
 			bundle.uninstall();
 			replay(bundleContext, bundle);
 
@@ -112,11 +121,14 @@ public class BundleRegistryTest {
 	@Test
 	public void ifBundleUninstallThrowsExceptionWrapItAndThrowItAgain() throws Exception {
 		File file = File.createTempFile(getClass().getName(), ".jar");
+		String fileLocation = file.toURI().toURL().toExternalForm();
 
 		try {
 			BundleContext bundleContext = createMock(BundleContext.class);
 			Bundle bundle = createMock(Bundle.class);
-			expect(bundleContext.installBundle(file.getAbsolutePath())).andReturn(bundle);
+			expect(bundleContext.installBundle(eq(fileLocation), (FileInputStream) anyObject()))
+					.andReturn(bundle);
+			bundle.start();
 			bundle.uninstall();
 			String errorMessage = UUID.randomUUID().toString();
 			expectLastCall().andThrow(new BundleException(errorMessage));
