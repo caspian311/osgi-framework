@@ -2,10 +2,10 @@ package example;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.todd.common.uitools.IListener;
 import net.todd.common.uitools.ListenerManager;
@@ -68,15 +68,11 @@ public class DirectoryWatcher implements IDirectoryWatcher {
 		addedDifferences.clear();
 		deletedDifferences.clear();
 
-		List<String> previousFileList = new ArrayList<String>(previousLastModifiedMap.keySet());
-		Collections.sort(previousFileList);
+		Set<String> previousFiles = previousLastModifiedMap.keySet();
+		Set<String> currentFiles = currentLastModifiedMap.keySet();
 
-		List<String> currentFileList = new ArrayList<String>(currentLastModifiedMap.keySet());
-		Collections.sort(currentFileList);
-
-		for (int i = 0; i < previousFileList.size(); i++) {
-			String previousPath = previousFileList.get(i);
-			if (!currentFileList.contains(previousPath)) {
+		for (String previousPath : previousFiles) {
+			if (!currentFiles.contains(previousPath)) {
 				deletedDifferences.add(new File(previousPath));
 			} else {
 				if (!previousLastModifiedMap.get(previousPath).equals(
@@ -86,9 +82,8 @@ public class DirectoryWatcher implements IDirectoryWatcher {
 			}
 		}
 
-		for (int i = 0; i < currentFileList.size(); i++) {
-			String currentPath = currentFileList.get(i);
-			if (!previousFileList.contains(currentPath)) {
+		for (String currentPath : currentFiles) {
+			if (!previousFiles.contains(currentPath)) {
 				addedDifferences.add(new File(currentPath));
 			}
 		}
