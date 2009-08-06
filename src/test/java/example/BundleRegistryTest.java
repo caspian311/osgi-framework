@@ -105,6 +105,7 @@ public class BundleRegistryTest {
 			expect(bundleContext.installBundle(eq(fileLocation), (FileInputStream) anyObject()))
 					.andReturn(bundle);
 			bundle.start();
+			bundle.stop();
 			bundle.uninstall();
 			replay(bundleContext, bundle);
 
@@ -129,6 +130,7 @@ public class BundleRegistryTest {
 			expect(bundleContext.installBundle(eq(fileLocation), (FileInputStream) anyObject()))
 					.andReturn(bundle);
 			bundle.start();
+			bundle.stop();
 			bundle.uninstall();
 			String errorMessage = UUID.randomUUID().toString();
 			expectLastCall().andThrow(new BundleException(errorMessage));

@@ -76,30 +76,20 @@ public class DirectoryWatcher implements IDirectoryWatcher {
 
 		for (int i = 0; i < previousFileList.size(); i++) {
 			String previousPath = previousFileList.get(i);
-			if (currentFileList.size() > i) {
-				String currentPath = currentFileList.get(i);
-				if (previousPath.equals(currentPath)) {
-					if (previousLastModifiedMap.get(previousPath).equals(
-							currentLastModifiedMap.get(currentPath))) {
-						continue;
-					} else {
-						changedDifferences.add(new File(currentPath));
-					}
-				} else {
-					if (currentFileList.contains(previousPath)) {
-						addedDifferences.add(new File(currentPath));
-					} else {
-						deletedDifferences.add(new File(previousPath));
-					}
-				}
-			} else {
+			if (!currentFileList.contains(previousPath)) {
 				deletedDifferences.add(new File(previousPath));
+			} else {
+				if (!previousLastModifiedMap.get(previousPath).equals(
+						currentLastModifiedMap.get(previousPath))) {
+					changedDifferences.add(new File(previousPath));
+				}
 			}
 		}
 
-		if (currentFileList.size() > previousFileList.size()) {
-			for (int i = previousFileList.size(); i < currentFileList.size(); i++) {
-				addedDifferences.add(new File(currentFileList.get(i)));
+		for (int i = 0; i < currentFileList.size(); i++) {
+			String currentPath = currentFileList.get(i);
+			if (!previousFileList.contains(currentPath)) {
+				addedDifferences.add(new File(currentPath));
 			}
 		}
 	}

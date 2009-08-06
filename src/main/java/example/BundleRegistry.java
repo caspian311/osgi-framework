@@ -55,6 +55,7 @@ public class BundleRegistry implements IBundleRegistry {
 		}
 
 		try {
+			bundle.stop();
 			bundle.uninstall();
 		} catch (BundleException e) {
 			throw new BundleRegistryException(e);

@@ -336,6 +336,70 @@ public class DirectoryWatcherTest {
 		}
 	}
 
+	@Test
+	public void whatEventsAreFiredCorrectlyForFileDeletionsWhenThereAreMultipleFiles()
+			throws Exception {
+		File tempDir = File.createTempFile(getClass().getName(), null);
+		tempDir.delete();
+		try {
+			tempDir.mkdir();
+
+			File file1 = new File(tempDir, "file1");
+			String file1Path = file1.getAbsolutePath();
+			FileOutputStream fos = null;
+			PrintWriter out = null;
+			try {
+				fos = new FileOutputStream(file1);
+				out = new PrintWriter(fos);
+
+				out.println("hello world");
+				out.flush();
+			} finally {
+				out.close();
+				fos.close();
+			}
+
+			File file2 = new File(tempDir, "file2");
+			try {
+				fos = new FileOutputStream(file2);
+				out = new PrintWriter(fos);
+
+				out.println("hello world");
+				out.flush();
+			} finally {
+				out.close();
+				fos.close();
+			}
+
+			DirectoryWatcher watcher = new DirectoryWatcher(tempDir);
+			MockChangeFileListener fileChangedListener = new MockChangeFileListener(watcher);
+			MockAddFileListener fileAddedListener = new MockAddFileListener(watcher);
+			MockDeleteFileListener fileDeletedListener = new MockDeleteFileListener(watcher);
+			watcher.addFileChangedListener(fileChangedListener);
+			watcher.addFileChangedListener(fileAddedListener);
+			watcher.addFileDeletedListener(fileDeletedListener);
+
+			watcher.checkForChanges();
+
+			assertNull(fileChangedListener.modifiedFiles);
+			assertNull(fileAddedListener.addedFiles);
+			assertNull(fileDeletedListener.deletedFiles);
+
+			File fileToDelete = new File(file1Path);
+			FileUtils.forceDelete(fileToDelete);
+
+			watcher.checkForChanges();
+
+			assertNull(fileChangedListener.modifiedFiles);
+			assertNull(fileAddedListener.addedFiles);
+			assertNotNull(fileDeletedListener.deletedFiles);
+			assertEquals(1, fileDeletedListener.deletedFiles.size());
+			assertEquals(file1Path, fileDeletedListener.deletedFiles.get(0).getAbsolutePath());
+		} finally {
+			FileUtils.deleteDirectory(tempDir);
+		}
+	}
+
 	private static class MockAddFileListener implements IListener {
 		private final DirectoryWatcher watcher;
 		private List<File> addedFiles;
