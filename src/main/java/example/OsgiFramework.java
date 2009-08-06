@@ -15,6 +15,7 @@ public class OsgiFramework {
 	public Framework initializeFramework() {
 		final Framework osgiFramework = implemenatation();
 		try {
+			osgiFramework.init();
 			osgiFramework.start();
 		} catch (BundleException e) {
 			throw new RuntimeException(e);
@@ -34,6 +35,18 @@ public class OsgiFramework {
 	}
 
 	Framework implemenatation() {
+		Map<String, Object> configuration = new HashMap<String, Object>();
+		configuration.put(Constants.FRAMEWORK_STORAGE, cacheLocation());
+		configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, extraSystemPackages());
+
+		return new Felix(configuration);
+	}
+
+	private String extraSystemPackages() {
+		return "javax.swing";
+	}
+
+	private String cacheLocation() {
 		String cacheLocation;
 		try {
 			final File cacheDirectory = File.createTempFile(getClass().getName() + "-cache", null);
@@ -42,8 +55,6 @@ public class OsgiFramework {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		Map<String, Object> configMap = new HashMap<String, Object>();
-		configMap.put(Constants.FRAMEWORK_STORAGE, cacheLocation);
-		return new Felix(configMap);
+		return cacheLocation;
 	}
 }

@@ -25,6 +25,7 @@ public class OsgiFrameworkTest {
 		String errorMessage = UUID.randomUUID().toString();
 
 		final Framework mockFramework = createMock(Framework.class);
+		mockFramework.init();
 		mockFramework.start();
 		expectLastCall().andThrow(new BundleException(errorMessage));
 		replay(mockFramework);
