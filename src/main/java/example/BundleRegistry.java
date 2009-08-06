@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 public class BundleRegistry implements IBundleRegistry {
+	private static final Log LOG = LogFactory.getLog(BundleRegistry.class);
 	private final BundleContext bundleContext;
 	private final Map<String, Bundle> registry = new HashMap<String, Bundle>();
 
@@ -19,6 +22,7 @@ public class BundleRegistry implements IBundleRegistry {
 	}
 
 	public void installBundle(File file) {
+		LOG.info("Installing bundle: " + file.getAbsolutePath());
 		FileInputStream inputstream = null;
 		try {
 			String bundleLocation;
@@ -43,6 +47,7 @@ public class BundleRegistry implements IBundleRegistry {
 	}
 
 	public void uninstallBundle(File file) throws BundleRegistryException {
+		LOG.info("Uninstalling bundle: " + file.getAbsolutePath());
 		Bundle bundle = registry.get(file.getAbsolutePath());
 		if (bundle == null) {
 			throw new BundleRegistryException("Could not uninstall bundle: "
