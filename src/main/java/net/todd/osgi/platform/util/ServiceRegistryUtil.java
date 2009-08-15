@@ -1,7 +1,9 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.todd.osgi.platform.IServiceEventHandler;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
