@@ -38,12 +38,11 @@ public class OsgiFramework {
 		Map<String, Object> configuration = new HashMap<String, Object>();
 		configuration.put(Constants.FRAMEWORK_STORAGE, cacheLocation());
 		configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, extraSystemPackages());
-
 		return new Felix(configuration);
 	}
 
 	private String extraSystemPackages() {
-		return "javax.swing, net.todd.osgi.platform.util";
+		return "javax.swing, net.todd.osgi.platform, net.todd.osgi.platform.util";
 	}
 
 	private String cacheLocation() {
