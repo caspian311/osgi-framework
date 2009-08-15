@@ -1,4 +1,4 @@
-package example;
+package net.todd.osgi.platform;
 
 import java.io.File;
 import java.io.FileInputStream;

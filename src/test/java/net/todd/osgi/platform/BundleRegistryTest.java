@@ -1,4 +1,4 @@
-package example;
+package net.todd.osgi.platform;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
@@ -14,6 +14,9 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.UUID;
+
+import net.todd.osgi.platform.BundleRegistry;
+import net.todd.osgi.platform.BundleRegistryException;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;

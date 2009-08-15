@@ -1,4 +1,4 @@
-package example;
+package net.todd.osgi.platform;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
@@ -9,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.UUID;
+
+import net.todd.osgi.platform.OsgiFramework;
 
 import org.junit.Test;
 import org.osgi.framework.BundleException;

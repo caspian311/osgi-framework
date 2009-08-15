@@ -1,4 +1,4 @@
-package example;
+package net.todd.osgi.platform;
 
 public class BundleRegistryException extends RuntimeException {
 	private static final long serialVersionUID = -6145566197114733904L;

@@ -1,4 +1,4 @@
-package example;
+package net.todd.osgi.platform;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class OsgiFramework {
 	}
 
 	private String extraSystemPackages() {
-		return "javax.swing";
+		return "javax.swing, example";
 	}
 
 	private String cacheLocation() {
