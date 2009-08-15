@@ -43,7 +43,7 @@ public class OsgiFramework {
 	}
 
 	private String extraSystemPackages() {
-		return "javax.swing, example";
+		return "javax.swing, net.todd.osgi.platform.util";
 	}
 
 	private String cacheLocation() {
