@@ -1,4 +1,4 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 public class ThreadDaemon {
 	private final Thread thread;

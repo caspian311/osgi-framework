@@ -1,4 +1,4 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
@@ -16,7 +16,7 @@ import net.todd.common.uitools.IListener;
 import net.todd.osgi.platform.BundleRegistryException;
 import net.todd.osgi.platform.IBundleRegistry;
 import net.todd.osgi.platform.IDirectoryWatcher;
-import net.todd.osgi.platform.ServiceManager;
+import net.todd.osgi.platform.core.ServiceManager;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;

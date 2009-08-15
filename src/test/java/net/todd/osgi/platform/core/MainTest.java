@@ -1,4 +1,4 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.util.UUID;
 
-import net.todd.osgi.platform.Main;
+import net.todd.osgi.platform.core.Main;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;

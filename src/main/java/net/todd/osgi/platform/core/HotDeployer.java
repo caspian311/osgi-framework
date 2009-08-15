@@ -1,6 +1,9 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import java.io.File;
+
+import net.todd.osgi.platform.IBundleRegistry;
+import net.todd.osgi.platform.IPluginDeployer;
 
 public class HotDeployer implements IPluginDeployer {
 	private final long sleeptime;

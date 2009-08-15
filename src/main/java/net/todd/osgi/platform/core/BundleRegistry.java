@@ -1,10 +1,13 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import net.todd.osgi.platform.BundleRegistryException;
+import net.todd.osgi.platform.IBundleRegistry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

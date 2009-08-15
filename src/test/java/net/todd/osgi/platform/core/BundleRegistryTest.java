@@ -1,4 +1,4 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
@@ -15,8 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.UUID;
 
-import net.todd.osgi.platform.BundleRegistry;
 import net.todd.osgi.platform.BundleRegistryException;
+import net.todd.osgi.platform.core.BundleRegistry;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;

@@ -1,8 +1,8 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import static org.junit.Assert.assertEquals;
 
-import net.todd.osgi.platform.ThreadDaemon;
+import net.todd.osgi.platform.core.ThreadDaemon;
 
 import org.junit.Test;
 

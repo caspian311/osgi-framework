@@ -1,4 +1,4 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import java.io.File;
 import java.io.IOException;

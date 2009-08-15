@@ -1,8 +1,10 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import java.io.File;
 
 import net.todd.common.uitools.IListener;
+import net.todd.osgi.platform.IBundleRegistry;
+import net.todd.osgi.platform.IDirectoryWatcher;
 
 public class ServiceManager {
 	private final IBundleRegistry bundleRegistry;

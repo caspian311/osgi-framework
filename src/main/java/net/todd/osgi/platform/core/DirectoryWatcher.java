@@ -1,4 +1,4 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import java.util.Set;
 
 import net.todd.common.uitools.IListener;
 import net.todd.common.uitools.ListenerManager;
+import net.todd.osgi.platform.IDirectoryWatcher;
 
 public class DirectoryWatcher implements IDirectoryWatcher {
 	private final File watchedDirectory;

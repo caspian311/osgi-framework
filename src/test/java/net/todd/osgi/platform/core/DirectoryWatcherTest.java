@@ -1,4 +1,4 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.todd.common.uitools.IListener;
-import net.todd.osgi.platform.DirectoryWatcher;
+import net.todd.osgi.platform.core.DirectoryWatcher;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;

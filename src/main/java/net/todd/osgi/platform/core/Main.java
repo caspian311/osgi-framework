@@ -1,6 +1,8 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import java.io.File;
+
+import net.todd.osgi.platform.IBundleRegistry;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.launch.Framework;

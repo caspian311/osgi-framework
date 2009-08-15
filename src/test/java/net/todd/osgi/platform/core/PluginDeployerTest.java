@@ -1,4 +1,4 @@
-package net.todd.osgi.platform;
+package net.todd.osgi.platform.core;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import net.todd.osgi.platform.IBundleRegistry;
-import net.todd.osgi.platform.PluginDeployer;
+import net.todd.osgi.platform.core.PluginDeployer;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
