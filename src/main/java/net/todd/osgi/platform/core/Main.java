@@ -21,16 +21,13 @@ public class Main {
 			throw new IllegalArgumentException(BAD_ARGUMENT_ERROR);
 		}
 
-		new Main().deployments(pluginDirectory);
-	}
-
-	private void deployments(File pluginDirectory) {
 		IBundleRegistry bundleRegistry = createBundleRegistry();
-		new PluginDeployer().deployPlugins(pluginDirectory, bundleRegistry);
-		new HotDeployer(1000).deployPlugins(pluginDirectory, bundleRegistry);
+		Platform platform = new Platform(bundleRegistry);
+		platform.staticDeployments(pluginDirectory);
+		platform.dynamicDeployments(pluginDirectory);
 	}
 
-	private IBundleRegistry createBundleRegistry() {
+	private static IBundleRegistry createBundleRegistry() {
 		Framework framework = new OsgiFramework().initializeFramework();
 		BundleContext bundleContext = framework.getBundleContext();
 		return new BundleRegistry(bundleContext);
